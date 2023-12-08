@@ -1,0 +1,268 @@
+*,*::before,*::after{box-sizing:border-box}body,h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin:0}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{min-height:100vh;text-rendering:optimizeSpeed;line-height:1.5}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;display:block}input,button,textarea,select{font:inherit}@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}}
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin-block-end: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+   scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/*Dashboard Design Start here*/
+
+body{
+  background-color: rgb(255, 225, 206);
+}
+
+#dashboardMainContainer {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.dashboard_sidebar{
+    width: 20%;
+    background: rgb(150, 70, 4);
+    height: 100vh;
+}
+
+.dashboard_logo{
+    color: rgb(255, 173, 65);
+    font-size: 70px;
+    text-align: center;
+}
+
+.dashboard_sidebar_user{
+    width: auto;
+    height: auto;
+    margin: 0 auto;
+    text-align: left;
+    position: relative;
+    padding-bottom: 20px;
+    border-bottom: 3px solid rgb(255, 192, 176);
+}
+
+.dashboard_sidebar_user img{
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: inline-block;
+    border-radius: 50%;
+    border: 2px solid rgb(255, 76, 32);
+    margin: auto 25%;
+}
+
+.dashboard_sidebar_user span{
+    top: 20%;
+    position: relative;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: rgb(255, 235, 225);
+    display: inline-block;
+    border: none;
+    margin-left: 25%;
+}
+
+.dashboard_menu_lists{
+    margin-top: 20px;
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0%;
+}
+
+.dashboard_menu_lists li{
+    padding: 15px 15px;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.dashboard_menu_lists li a{
+    text-decoration: none;
+    color:rgb(255, 255, 255);
+    height: 100%;
+    display: block;
+}
+
+.dashboard_menu_lists .menuActive{
+    background: rgb(150, 70, 4);
+    color: rgb(255, 212, 212);
+}
+
+.dashboard_menu_lists li:hover{
+    background: rgb(255, 154, 96);
+    color: beige;
+    transition: .8s all;
+}
+
+.dashboard_topNav{
+    background: rgb(238, 184, 148);
+    width: 100%;
+    height: 50px;
+    padding: 15px; 
+}
+
+.dashboard_content_container{
+  background-color: rgb(255, 225, 206);
+  height: 100%;
+  width: 100%;
+}
+
+.dashboard_topNav a{
+    color: rgb(77, 34, 0);
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.dashboard_topNav a:hover{
+    background: rgb(250, 197, 128);
+    border: 4px solid rgb(250, 197, 128);
+}
+
+#logoutBtn{
+    float: right;
+}
+
+.dashboard_content{
+    background: rgb(255, 225, 206);
+    padding: 40px 0px 0px 0px;
+    height: 100%;
+}
+
+.dashboard_content_main {
+  background-color: rgb(255, 225, 206);
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  
+}
+
+.sidebarActive {
+    width: 0 !important;
+}
+
+
+.contentContainerActive {
+    width: 100% !important;
+}
+
+.subMenuLink{
+  padding-left: 0px !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px;
+  text-transform: none;
+  text-decoration: none;
+  list-style-type: none;
+}
+
+.subMenus{
+  display: none;
+}
+
+.subMenus:hover {
+  background-color: rgb(224, 149, 114);
+}
+
+.sub_Menu ul{
+  margin-left: 0px;
+}
+
+.subMenuLink i{
+  font-size: 20px !important;
+}
+
+.subMenuActive{
+  font-weight: bold;
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
+  background-color: rgb(38, 105, 24);
+}
+

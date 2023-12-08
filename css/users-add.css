@@ -1,0 +1,229 @@
+.dashboard_Main{
+    background-color: rgb(255, 225, 206);
+    object-fit: cover;
+    height: 565px;
+    width: 98%;
+    margin-left: 2%;
+}
+
+.row{
+    margin-left: 10px;
+    position: relative; 
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.column {
+    margin: 5px 0px 5px 0px;
+    padding: 5px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgb(201, 104, 24);
+}
+
+.appform{
+    height: auto;
+    position: relative;
+    margin: 80px auto;
+    padding: 10px;
+    border: 2px solid rgb(255, 150, 102);
+    text-align: center;
+    width: 300px;
+    background-color: rgb(250, 216, 172);
+    border-radius: 5px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+}
+
+.appform h2{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+    text-align: center;
+    font-size: 30px;
+    padding: 0;
+}
+
+.inputAF{
+    position: relative;
+    margin: 0 auto;
+    width: 270px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.labels-input{
+    position: relative;
+    text-align: left;
+    font-size: 14px;
+}
+
+.appform button{
+    position: relative;
+    margin: 1px 0px 1px 170px;
+    background-color: rgb(252, 156, 31);
+    color: black;
+    border-radius: 10px;
+}
+
+.responseMessage{   
+    font-size: 18px;
+    text-align: center;
+    margin-top: 10px;
+    background-color: rgb(81, 255, 29);
+    color: aliceblue;
+    padding: 15px;
+    width: 100%;
+}
+
+.responseMessage__error{
+    font-size: 18px;
+    text-align: center;
+    margin-top: 33px;
+    background-color: rgb(255, 128, 123);
+    padding: 20px;
+    color: black;
+    width: 100%;
+}
+
+.responseMessage__success{
+    font-size: 18px;
+    text-align: center;
+    margin-top: 33px;
+    background-color: rgb(103, 255, 57);
+    padding: 20px;
+    color: black;
+    width: 100%;
+}
+
+.column form{
+    margin-top: 10px;
+}
+
+.column-5{
+    width: 35%;
+}
+
+.column-7{
+    width: 65%;
+}
+
+.section_header {
+    width: 100%;
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+    border-bottom: 1px solid coral;
+    padding: 10px;
+    border-left: 4px solid rgb(255, 88, 28);
+    text-align: left;
+}
+
+.users table{
+    width: 100%;
+}
+
+.users table, th, td{
+    margin-top: 10px;
+    border: 2px solid rgb(122, 72, 49);
+    border-collapse: collapse;
+}
+
+.users th{
+    text-transform: uppercase;
+    font-size: 14px;
+    background-color: rgb(241, 172, 107);
+    text-align: center;
+}
+
+.users td{
+    font-size: 14px;
+    text-align: center;
+}
+
+.userCount{
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: black;
+    margin-top: 10px;
+    margin-right: 10px;
+    border: none;
+    position: relative;
+}
+
+.fa{
+    margin-right: 10px;
+}
+
+.mainMenuIconArrow{
+    float: right;
+    font-size: 90px;
+    margin-left: 20%;
+}
+
+.productContainer{
+    width: 500px;
+}
+
+.productContainer input{
+    width: 460px;
+    position: relative;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.productContainer button{
+    position: relative;
+    margin-left: 0px;
+    border-radius: 5px;
+}
+
+.productTextArea{
+    text-align: left;
+    height: 60px;
+    width: 460px;
+}
+
+.productImages{
+    width: 100px;
+    height: 100px;
+}
+
+.icon{
+    padding: 0%;
+    margin: 0%;
+    color: blue;
+}
+
+.suppliers{
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.suppliers select{
+    display: block;
+    width: 50%;
+    max-height: 100px;
+    height: 100%;
+    border: 1px solid black;
+    text-align: center;
+}
+
+.supplierArr{
+    margin-right: 0px;
+}
+
+.removeOrderBtn{
+    background-color: red;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-left: 60%;
+    font-size: 12px;
+}
+
+.removeOrderBtn:hover{
+    background-color: rgb(255, 255, 255);
+    color: rgb(255, 0, 0);
+}

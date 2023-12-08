@@ -1,0 +1,99 @@
+.poCSS{
+    margin-bottom: 25px;
+    padding: 15px;
+    border-bottom: solid 2px rgb(18, 94, 35);
+    border-radius: 5px;
+    background: rgb(181, 221, 185);
+}
+
+.poCSS p{
+    color: rgb(8, 43, 11);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.poCSS table td, table th{
+    border: none;
+    border-bottom: 2px dotted rgb(18, 94, 35);
+}
+
+.poCSS table{
+    padding: 13px 14px;
+    font-size: 15px;
+}
+
+.poCSS td{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: auto;
+    font-size: 13px;
+}
+
+.qtyCenter{
+    padding-left: 50px;
+}
+
+.indexSpace{
+    padding-right: 30px;
+}
+
+.poCSS table{
+    width: 100%;
+}
+
+.poBtn{
+    margin-top: 5px;
+    color: rgb(8, 43, 11);
+    border-radius: 5px;
+    margin-left: 85%;
+    font-weight: bold;
+}
+
+.po-badge{
+    background-color: rgb(72, 146, 72);
+    color: white;
+    border: 1px solid rgb(15, 90, 15);
+    border-radius: 5px;
+    padding: 2px;
+}
+
+.po-badge-pending{
+    background-color: rgb(255, 9, 1);
+    color: white;
+    border: 1px solid rgb(15, 90, 15);
+}
+
+.po-badge-arrived{
+    background-color: rgb(72, 146, 72);
+    color: white;
+    border: 1px solid rgb(15, 90, 15);
+}
+
+.orderTable{
+    margin-top: -80%;
+}
+
+.orderTable th{
+    padding: 10px;
+    text-align: center;
+    background-color: bisque;
+    border: 2px solid black;
+}
+
+.orderTable td{
+    padding: 10px;
+}
+
+.qtyMid{
+    text-align: center;
+}
+
+.modal-body{
+    height: auto;
+}
+
+.bootstrap-dialog-message{
+    position: relative;
+    height: fit-content;
+}

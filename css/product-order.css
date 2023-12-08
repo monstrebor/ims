@@ -1,0 +1,70 @@
+.rows{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-top: 5px;
+}
+
+.addProd{
+    position: relative;
+    margin-left: 80%;
+}
+
+.addProd button{
+    background-color: rgb(255, 255, 255);
+    color: rgb(9, 77, 9);
+    border-radius: 5px;
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin-bottom: 5px;
+}
+
+.addProd button:hover{
+    background-color: darkgreen;
+    color:aliceblue;
+}
+
+.orderProductRow{
+    padding: 6px;
+    border-bottom: 2px solid rgb(85, 206, 85);
+    padding-bottom: 25px;
+}
+
+.suppliersRows{
+    position: relative;
+
+}
+
+.suppliersRows p{
+    padding-right: 450px !important;
+}
+
+.suppliersRows label{
+    padding-right: 10px;
+}
+
+.submitOrder{
+    position: relative;
+    margin-left: 80%;
+}
+
+.submitOrder button{
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    font-weight: bolder;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: rgb(9, 77, 9);
+}
+
+.submitOrder button:hover{
+    background-color: darkgreen;
+    color:aliceblue;
+}
+
+.suppliersRows input{
+    width: 100px;
+}
+
+
+
