@@ -70,6 +70,12 @@
     border: 1px solid rgb(15, 90, 15);
 }
 
+.po-badge-incomplete{
+    background-color: yellow;
+    color: black;
+    border: 1px solid rgb(15, 90, 15);
+}
+
 .orderTable{
     margin-top: -80%;
 }
@@ -87,13 +93,4 @@
 
 .qtyMid{
     text-align: center;
-}
-
-.modal-body{
-    height: auto;
-}
-
-.bootstrap-dialog-message{
-    position: relative;
-    height: fit-content;
 }

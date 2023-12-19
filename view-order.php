@@ -103,136 +103,130 @@ $suppliers = include('database/show.php');
 
 
 <?php include('partials/app-scripts.php'); ?>
-
 <script>
 
-    function script(){
+    function script() {
         var vm = this;
 
-    this.registerEvents = function(){
-        document.addEventListener('click', function(e){
-            targetElement = e.target; //target element
-            classList = targetElement.classList;
+        this.registerEvents = function () {
+            document.addEventListener('click', function (e) {
+                targetElement = e.target; // target element
+                classList = targetElement.classList;
 
+                if (classList.contains('updatePoBtn')) {
+                    e.preventDefault(); // prevents the default mechanism
 
-            if(classList.contains('updatePoBtn')){
-                e.preventDefault(); //prevents the default mechanism
+                    batchNumber = targetElement.dataset.id;
+                    batchNumberContainer = 'container-' + batchNumber;
 
-                batchNumber = targetElement.dataset.id;
-                batchNumberContainer = 'container-' + batchNumber;
+                    // get all purchase order products records
+                    productList = document.querySelectorAll('#' + batchNumberContainer + ' .po_product');
+                    quantity_orderedList = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_ordered');
+                    quantity_receivedList = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_received');
+                    supplierList = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_supplier');
+                    statusList = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_status');
+                    rowIds = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_row_id');
 
-                //get all purchase order products records
-                productList = document.querySelectorAll('#' + batchNumberContainer + ' .po_product');
-                quantity_orderedList = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_ordered');
-                quantity_receivedList = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_received');
-                supplierList = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_supplier');
-                statusList = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_status');
-                rowIds = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_row_id');
-
-                poListsArr = [];
-                for(i=0; i<productList.length; i++){
-                    poListsArr.push({
-                        name: productList[i].innerText,
-                        quantity_ordered: quantity_orderedList[i].innerText,
-                        quantity_received: quantity_receivedList[i].innerText,
-                        supplier: supplierList[i].innerText,
-                        status: statusList[i].innerText,
-                        id: rowIds[i].value
-                    });
-                }
-
-                //store in HTML
-    var poListHtml = `
-                <table style="margin-top: -98%;" id="formTable_${batchNumber}">
-                    <thead>
-                        <tr>
-                            <th>Product Name</th>
-                            <th style="padding-right: 10px;">Quantity ordered</th>
-                            <th>Quantity received</th>
-                            <th>Supplier</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
-
-    poListsArr.forEach((poList) => {
-        poListHtml += `
-                        <tr>
-                            <td class="po_product">${poList.name}</td>
-                            <td class="po_qty_ordered qtyCenter">${poList.quantity_ordered}</td>
-                            <td class="po_qty_received"><input type="number" value="${poList.quantity_received}"></td>
-                            <td class="po_qty_supplier">${poList.supplier}</td>
-                            <td>
-                                <select class="po_qty_status">
-                                    <option value="pending" ${poList.status} == 'pending' ? 'selected' : ''>pending</option>
-                                    <option value="arrived" ${poList.status} == 'arrived' ? 'selected' : ''>arrived</option>
-                                </select>
-                                <input type="hidden" class="po_qty_row_id" value="${poList.id}">
-                            </td>
-                        </tr>
-                        `;
-                });
-        poListHtml +=`</tbody></table>`;
-                
-        pName = targetElement.dataset.name;
-                            
-                BootstrapDialog.confirm({
-                                type: BootstrapDialog.TYPE_PRIMARY,
-                                title: 'Update Purchase Order: Batch #: <strong>'+ batchNumber +'</strong>',
-                                message: poListHtml,
-                            callback: function(toAdd){
-                    //if we add
-                    if(toAdd){   
-                    formTableContainer = 'formTable_' + batchNumber;
-
-                //get all purchase order products records
-                quantity_receivedList = document.querySelectorAll('#' + formTableContainer + ' .po_qty_received');
-                statusList = document.querySelectorAll('#' + formTableContainer + ' .po_qty_status');
-                rowIds = document.querySelectorAll('#' + formTableContainer + ' .po_qty_row_id');
-
-                poListsArrForm = [];
-                for(i=0; i<quantity_receivedList.length; i++){
-                    poListsArrForm.push({
-                        quantity_ordered: quantity_orderedList[i].innerText,
-                        quantity_received: quantity_receivedList[i].innerText,
-                        supplier: supplierList[i].innerText,
-                        status: statusList[i].innerText,
-                        id: rowIds[i].value
-                    });
-                }
-
-                        $.ajax({
-                                method: 'POST',
-                                data: {
-                                id: pId,
-                                table: 'products'
-                                },
-                                url: 'database/delete.php',
-                                dataType: 'json',
-                                success: function(data){
-                                    message = data.success ?
-                                        pName + ' successfully deleted' : 'Error processing your request!';
-
-                                    BootstrapDialog.alert({
-                                    type: data.success ? BootstrapDialog.TYPE_SUCCESS: BootstrapDialog.TYPE_DANGER,
-                                    message: message,
-                                    callback: function(){
-                                        if(data.success) location.reload();
-                                } 
-                            });
-                            }
+                    poListsArr = [];
+                    for (i = 0; i < productList.length; i++) {
+                        poListsArr.push({
+                            name: productList[i].innerText,
+                            quantity_ordered: quantity_orderedList[i].innerText,  // Use quantity_orderedList here
+                            quantity_received: quantity_receivedList[i].innerText,
+                            supplier: supplierList[i].innerText,
+                            status: statusList[i].innerText,
+                            id: rowIds[i].value
                         });
                     }
-                    }   
-                });
-            }
 
-        });
+                    // store in HTML
+                    var poListHtml = `
+                        <table style="margin-top: -80%;" id="formTable_${batchNumber}">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th style="padding-right: 10px;">Quantity ordered</th>
+                                    <th>Quantity received</th>
+                                    <th>Supplier</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
 
-    },
-    
+                    poListsArr.forEach((poList) => {
+                        poListHtml += `
+                            <tr>
+                                <td class="po_product">${poList.name}</td>
+                                <td class="po_qty_ordered qtyCenter">${poList.quantity_ordered}</td>
+                                <td class="po_qty_received"><input type="number" value="${poList.quantity_received}"></td>
+                                <td class="po_qty_supplier">${poList.supplier}</td>
+                                <td>
+                                    <select class="po_qty_status">
+                                        <option value="pending" ${poList.status == 'pending' ? 'selected' : ''}>pending</option>
+                                        <option value="incomplete" ${poList.status == 'incomplete' ? 'selected' : ''}>incomplete</option>
+                                        <option value="arrived" ${poList.status == 'arrived' ? 'selected' : ''}>arrived</option>
+                                    </select>
+                                    <input type="hidden" class="po_qty_row_id" value="${poList.id}">
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    poListHtml += `</tbody></table>`;
 
-        this.initialize = function(){
+                    pName = targetElement.dataset.name;
+
+                    BootstrapDialog.confirm({
+                        type: BootstrapDialog.TYPE_PRIMARY,
+                        title: 'Update Purchase Order: Batch #: <strong>' + batchNumber + '</strong>',
+                        message: poListHtml,
+                        callback: function (toAdd) {
+                            // if we add
+                            if (toAdd) {
+                                formTableContainer = 'formTable_' + batchNumber;
+
+                                // get all purchase order products records
+                                quantity_receivedList = document.querySelectorAll('#' + formTableContainer + ' .po_qty_received input');
+                                statusList = document.querySelectorAll('#' + formTableContainer + ' .po_qty_status');
+                                rowIds = document.querySelectorAll('#' + formTableContainer + ' .po_qty_row_id');
+                                quantity_orderedList = document.querySelectorAll('#' + formTableContainer + ' .po_qty_ordered');
+
+                                poListsArrForm = [];
+                                for (i = 0; i < quantity_receivedList.length; i++) {
+                                    poListsArrForm.push({
+                                        quantity_received: quantity_receivedList[i].value,
+                                        status: statusList[i].value,
+                                        id: rowIds[i].value,
+                                        quantity_ordered: quantity_orderedList[i].innerText  
+                                    });
+                                }
+
+                                // send request or update database
+                                $.ajax({
+                                    method: 'POST',
+                                    data: {
+                                        payload: poListsArrForm
+                                    },
+                                    url: 'database/update-order.php',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        message = data.message;
+                                        BootstrapDialog.alert({
+                                            type: data.success ? BootstrapDialog.TYPE_SUCCESS : BootstrapDialog.TYPE_DANGER,
+                                            message: message,
+                                            callback: function () {
+                                                if (data.success) location.reload();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        },
+
+        this.initialize = function () {
             this.registerEvents();
         }
     }
@@ -240,6 +234,7 @@ $suppliers = include('database/show.php');
     var script = new script;
     script.initialize();
 </script>
+
 </body>
 
 </html>

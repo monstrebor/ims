@@ -4,8 +4,10 @@ session_start();
 if(!isset($_SESSION['user'])) header('Location: login.php');
 $user = $_SESSION['user'];
 
-?>
+//get graph data in purchase order by status
+    include('database/po_status_pie_graph.php');
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,10 +27,76 @@ $user = $_SESSION['user'];
             </div>
                 <div class="dashboard_content">
                     <div class="dashboard_content_main">
+                    <figure class="highcharts-figure">
+                    <div id="container"></div>
+                    <p class="highcharts-description" style="text-align: center;">
+                        Here is the breakdown of purchase orders by status.
+                    </p>
+                    </figure>
                     </div>
                 </div>
         </div>
     </div>
     <script src="js/script.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+    <script>
+
+            var graphData = <?= json_encode($results)?>
+            
+            Highcharts.chart('container', {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Purchase Orders by Status'
+            },
+            tooltip: {
+                pointFormatter: function(){ // this function will grant you more access to the data
+                    var point = this,
+                    series = point.series;
+
+                    return `<b>${point.name}</b>: ${point.y}`
+                }
+            },
+            subtitle: {
+                text:
+                'Source:<a href="https://www.mdpi.com/2072-6643/11/3/684/htm" target="_default">MDPI</a>'
+            },
+            plotOptions: {
+                series: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: [{
+                        enabled: true,
+                        format:'<b>{point.name}</b>: {point.y}',
+                        distance: 20
+                    }, {
+                        enabled: true,
+                        distance: -40,
+                        style: {
+                            fontSize: '1.2rem',
+                            textOutline: 'none',
+                            opacity: 0.7
+                        },
+                        filter: {
+                            operator: '>',
+                            property: 'point',
+                            value: 10
+                        }
+                    }]
+                }
+            },
+            series: [
+                {
+                    name: 'Percentage',
+                    colorByPoint: true,
+                    data: graphData
+                }
+            ]
+        });
+    </script>
 </body>
 </html>
