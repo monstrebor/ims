@@ -2,7 +2,7 @@
 $purchase_orders = $_POST['payload'];
 include('connection.php');
 
-try{
+// try{
 
     foreach ($purchase_orders as $po) {
             $delivered = (int) $po['quantity_delivered'];
@@ -13,6 +13,9 @@ try{
             $status = $po['status'];
             $row_id = $po['id'];
             $ordered = (int) $po['quantity_ordered'];
+            $product_id = (int) $po['pid'];
+
+
 
             // update quantity received
             $updated_qty_received = $cur_qty_received + $delivered;
@@ -42,8 +45,27 @@ try{
         $stmt = $conn->prepare($sql);
         $stmt->execute($delivery_history);
 
-        }
+            //Script for updating the main product quantity
+            //Select Statement to pull the current quantity of the product and update statement 
+        $stmt = $conn->prepare("SELECT products.stock
+                FROM products
+                    WHERE id = $product_id
+                                ");
+    $stmt->execute();
+    $product = $stmt->fetch();
 
+    $cur_stock = (int) $product['stock'];
+    
+    //update statement to add the delivered product to the current quantity
+    $updated_stock = $cur_stock + $delivered;
+    $sql = "UPDATE products 
+                SET
+                stock = ?
+                WHERE id = ?";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$updated_stock, $product_id]);
+        }
     }
 
     $response = [
@@ -51,12 +73,12 @@ try{
         'message' => "Purchase order successfully updated."
     ];
 
-}catch (\Exception $e){
-    $response = [
-        'success' => false,
-        'message' => "Error processing your request."
-    ];
-}
+// }catch (\Exception $e){
+//     $response = [
+//         'success' => false,
+//         'message' => "Error processing your request."
+//     ];
+// }
 
 echo json_encode($response);
 

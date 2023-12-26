@@ -31,7 +31,7 @@ $suppliers = include('database/show.php');
                             <h1 class="section_header"><i class="fa fa-list"></i>List of Purchase Orders</h1>
                             <div class="poListContainers">
                                 <?php
-                                $stmt = $conn->prepare("SELECT order_product.id, products.product_name, 
+                                $stmt = $conn->prepare("SELECT order_product.id, order_product.product, products.product_name, 
                                                     order_product.quantity_ordered,
                                                     order_product.quantity_received, users.first_name, 
                                                     users.last_name,suppliers.supplier_name, 
@@ -66,6 +66,7 @@ $suppliers = include('database/show.php');
                                                     <th>Status</th>
                                                     <th>Ordered by</th>
                                                     <th>Created date</th>
+                                                    <th>Delivery History</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -82,6 +83,10 @@ $suppliers = include('database/show.php');
                                                         <td><?= $batch_po['first_name'] . ' ' . $batch_po['last_name'] ?></td>
                                                         <td><?= $batch_po['created_at'] ?>
                                                             <input type="hidden" class="po_qty_row_id" value="<?= $batch_po['id'] ?>">
+                                                            <input type="hidden" class="po_qty_productid" value="<?= $batch_po['product'] ?>">
+                                                        </td>
+                                                        <td>
+                                                            <button class="appBtn appDeliveryHistory" data-id="<?= $batch_po['id']?>">Deliveries</button>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
@@ -113,7 +118,7 @@ $suppliers = include('database/show.php');
                 targetElement = e.target; // target element
                 classList = targetElement.classList;
 
-                if (classList.contains('updatePoBtn')) {
+        if (classList.contains('updatePoBtn')) {
                     e.preventDefault(); // prevents the default mechanism
 
                     batchNumber = targetElement.dataset.id;
@@ -126,6 +131,7 @@ $suppliers = include('database/show.php');
                     supplierList = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_supplier');
                     statusList = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_status');
                     rowIds = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_row_id');
+                    pIds = document.querySelectorAll('#' + batchNumberContainer + ' .po_qty_productid');
 
                     poListsArr = [];
                     for (i = 0; i < productList.length; i++) {
@@ -135,7 +141,8 @@ $suppliers = include('database/show.php');
                             quantity_received: quantity_receivedList[i].innerText,
                             supplier: supplierList[i].innerText,
                             status: statusList[i].innerText,
-                            id: rowIds[i].value
+                            id: rowIds[i].value,
+                            pid: pIds[i].value
                         });
                     }
 
@@ -159,7 +166,7 @@ $suppliers = include('database/show.php');
                             <tr>
                                 <td class="po_product">${poList.name}</td>
                                 <td class="po_qty_ordered qtyCenter">${poList.quantity_ordered}</td>
-                                <td class="po_qty_received">${poList.quantity_received}</td>
+                                <td class="po_qty_received" style="text-align: center;">${poList.quantity_received}</td>
                                 <td class="po_qty_delivered"><input type="number" value="0"></td>
                                 <td class="po_qty_supplier">${poList.supplier}</td>
                                 <td>
@@ -169,11 +176,12 @@ $suppliers = include('database/show.php');
                                         <option value="arrived" ${poList.status == 'arrived' ? 'selected' : ''}>arrived</option>
                                     </select>
                                     <input type="hidden" class="po_qty_row_id" value="${poList.id}">
+                                    <input type="hidden" class="po_qty_pid" value="${poList.pid}">
                                 </td>
                             </tr> </div>
                         `;
-                    });
-                    poListHtml += `</tbody></table>`;
+        });
+                poListHtml += `</tbody></table>`;
 
                     pName = targetElement.dataset.name;
 
@@ -192,6 +200,7 @@ $suppliers = include('database/show.php');
                                 statusList = document.querySelectorAll('#' + formTableContainer + ' .po_qty_status');
                                 rowIds = document.querySelectorAll('#' + formTableContainer + ' .po_qty_row_id');
                                 quantity_orderedList = document.querySelectorAll('#' + formTableContainer + ' .po_qty_ordered');
+                                pids = document.querySelectorAll('#' + formTableContainer + ' .po_qty_pid');
 
                                 poListsArrForm = [];
                                 for (i = 0; i < quantity_deliveredList.length; i++) {
@@ -200,7 +209,8 @@ $suppliers = include('database/show.php');
                                         quantity_delivered: quantity_deliveredList[i].value,
                                         status: statusList[i].value,
                                         id: rowIds[i].value,
-                                        quantity_ordered: quantity_orderedList[i].innerText  
+                                        quantity_ordered: quantity_orderedList[i].innerText, 
+                                        pid: pids[i].value
                                     });
                                 }
 
@@ -227,6 +237,52 @@ $suppliers = include('database/show.php');
                         }
                     });
                 }
+        // if deliveries button is clicked
+        if(classList.contains('appDeliveryHistory')){
+            let id = targetElement.dataset.id;
+            
+        $.get('database/view-delivery-history.php', {id: id}, function(data){
+            if(data.length){
+            rows = '';
+            data.forEach((row, id) =>{
+            receivedDate = new Date(row['date_received']);
+                rows +=
+                    `<tr>
+                        <td>${(id + 1)}</td> 
+                        <td>${receivedDate.toUTCString()}</td>
+                        <td>${row['qty_received']}</td>
+                    </tr>`;
+            });
+
+                deliveryHistoryHtml = 
+            `<table class="delivHistory">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date Received</th>
+                        <th>Quantity Received</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}
+                </tbody>
+            </table>`;
+
+                BootstrapDialog.show({
+                    title: '<strong>Delivery histories</strong>',
+                    type: BootstrapDialog.TYPE_PRIMARY,
+                    message: deliveryHistoryHtml
+                })
+            } else{
+                BootstrapDialog.alert({
+                    title: '<strong>No Delivery History</strong>',
+                    type: BootstrapDialog.TYPE_INFO,
+                    message: 'No delivery history on selected product'
+                })
+            }
+            console.log(data);
+        }, 'json');
+
+        }
             });
         },
 
