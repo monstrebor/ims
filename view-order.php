@@ -147,6 +147,7 @@ $suppliers = include('database/show.php');
                                     <th>Product Name</th>
                                     <th style="padding-right: 10px;">Quantity ordered</th>
                                     <th>Quantity received</th>
+                                    <th>Quantity delivered</th>
                                     <th>Supplier</th>
                                     <th>Status</th>
                                 </tr>
@@ -154,11 +155,12 @@ $suppliers = include('database/show.php');
                             <tbody>`;
 
                     poListsArr.forEach((poList) => {
-                        poListHtml += `
+                        poListHtml += `<div class="trForm">
                             <tr>
                                 <td class="po_product">${poList.name}</td>
                                 <td class="po_qty_ordered qtyCenter">${poList.quantity_ordered}</td>
-                                <td class="po_qty_received"><input type="number" value="${poList.quantity_received}"></td>
+                                <td class="po_qty_received">${poList.quantity_received}</td>
+                                <td class="po_qty_delivered"><input type="number" value="0"></td>
                                 <td class="po_qty_supplier">${poList.supplier}</td>
                                 <td>
                                     <select class="po_qty_status">
@@ -168,7 +170,7 @@ $suppliers = include('database/show.php');
                                     </select>
                                     <input type="hidden" class="po_qty_row_id" value="${poList.id}">
                                 </td>
-                            </tr>
+                            </tr> </div>
                         `;
                     });
                     poListHtml += `</tbody></table>`;
@@ -185,15 +187,17 @@ $suppliers = include('database/show.php');
                                 formTableContainer = 'formTable_' + batchNumber;
 
                                 // get all purchase order products records
-                                quantity_receivedList = document.querySelectorAll('#' + formTableContainer + ' .po_qty_received input');
+                                quantity_receivedList = document.querySelectorAll('#' + formTableContainer + ' .po_qty_received');
+                                quantity_deliveredList = document.querySelectorAll('#' + formTableContainer + ' .po_qty_delivered input');
                                 statusList = document.querySelectorAll('#' + formTableContainer + ' .po_qty_status');
                                 rowIds = document.querySelectorAll('#' + formTableContainer + ' .po_qty_row_id');
                                 quantity_orderedList = document.querySelectorAll('#' + formTableContainer + ' .po_qty_ordered');
 
                                 poListsArrForm = [];
-                                for (i = 0; i < quantity_receivedList.length; i++) {
+                                for (i = 0; i < quantity_deliveredList.length; i++) {
                                     poListsArrForm.push({
-                                        quantity_received: quantity_receivedList[i].value,
+                                        quantity_received: quantity_receivedList[i].innerText,
+                                        quantity_delivered: quantity_deliveredList[i].value,
                                         status: statusList[i].value,
                                         id: rowIds[i].value,
                                         quantity_ordered: quantity_orderedList[i].innerText  

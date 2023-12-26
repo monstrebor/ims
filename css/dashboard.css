@@ -313,3 +313,11 @@ input[type="number"] {
     min-width: 50px;
 }
 
+.col50{
+  width: 50%;
+}
+
+.dashboard_content_main{
+  display: flex;
+  flex-direction: row;
+}

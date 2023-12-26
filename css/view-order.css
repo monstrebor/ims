@@ -90,7 +90,15 @@
 .orderTable td{
     padding: 10px;
 }
+.orderTable tr{
+    padding: 10px;
+}
 
 .qtyMid{
     text-align: center;
+}
+
+.trForm td{
+    text-align: center;
+    padding: 5px;
 }

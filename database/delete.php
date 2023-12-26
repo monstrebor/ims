@@ -4,7 +4,7 @@ $data = $_POST;
 $id = (int) $data['id'];
 $table = $data['table'];
 
-try { //adding the record
+try { 
     include('connection.php');
 
     //delete junction table
@@ -19,6 +19,7 @@ try { //adding the record
         $command = "DELETE FROM productsuppliers WHERE product={$id}";
         $conn->exec($command);
     }
+
     //delete main table
     $command = "DELETE FROM $table WHERE id={$id}";
 

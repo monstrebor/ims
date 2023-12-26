@@ -6,6 +6,7 @@ $user = $_SESSION['user'];
 
 //get graph data in purchase order by status
     include('database/po_status_pie_graph.php');
+    include('database/supplier_product_bar_graph.php');
 
 ?>
 <!DOCTYPE html>
@@ -27,12 +28,20 @@ $user = $_SESSION['user'];
             </div>
                 <div class="dashboard_content">
                     <div class="dashboard_content_main">
-                    <figure class="highcharts-figure">
-                    <div id="container"></div>
-                    <p class="highcharts-description" style="text-align: center;">
-                        Here is the breakdown of purchase orders by status.
-                    </p>
-                    </figure>
+                        <div class="col50">
+                            <figure class="highcharts-figure">
+                            <div id="container"></div>
+                            <p class="highcharts-description" style="text-align: center;">
+                                Here is the breakdown of purchase orders by status. </p>
+                            </figure>
+                        </div>
+                        <div class="col50">
+                            <figure class="highcharts-figure">
+                            <div id="containerBarChart"></div>
+                            <p class="highcharts-description" style="text-align: center;">
+                                Here is the breakdown of purchase orders by status. </p>
+                            </figure>
+                        </div>
                     </div>
                 </div>
         </div>
@@ -44,7 +53,7 @@ $user = $_SESSION['user'];
 
     <script>
 
-            var graphData = <?= json_encode($results)?>
+            var graphData = <?= json_encode($results)?>;
             
             Highcharts.chart('container', {
             chart: {
@@ -60,10 +69,6 @@ $user = $_SESSION['user'];
 
                     return `<b>${point.name}</b>: ${point.y}`
                 }
-            },
-            subtitle: {
-                text:
-                'Source:<a href="https://www.mdpi.com/2072-6643/11/3/684/htm" target="_default">MDPI</a>'
             },
             plotOptions: {
                 series: {
@@ -97,6 +102,51 @@ $user = $_SESSION['user'];
                 }
             ]
         });
+
+
+        var barGraphData = <?= json_encode($bar_chart_data)?>;
+        var barGraphCategories = <?= json_encode($categories)?>;
+
+        Highcharts.chart('containerBarChart', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Product Count Assigned To Supplier',
+        align: 'center'
+    },
+    xAxis: {
+        categories: barGraphCategories,
+        crosshair: true,
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Product Count'
+        }
+    },
+    tooltip: {
+                pointFormatter: function(){ // this function will grant you more access to the data
+                    var point = this,
+                    series = point.series;
+
+                    return `<b>${point.category}</b>: ${point.y}`
+                }
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [
+        {
+            name: 'Suppliers',
+            data: barGraphData
+        },
+
+    ]
+});
     </script>
 </body>
 </html>
