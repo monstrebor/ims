@@ -1,0 +1,49 @@
+.reportTypeContainer{
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 31px;
+}
+
+.reportType{
+    border: 1px solid #c2c6c2;
+    padding: 10px;
+    border-radius:4px;
+    background: #fff;
+    font-size: 14px;
+    margin-left: 21px;
+    width: 100%;
+}
+
+.reportType:hover{
+    background: #b0ff9d;
+}
+
+.alignRight{
+    text-align: right;
+}
+
+.reportExportBtn{
+    padding: 4px 15px;
+    display: inline-block;
+    text-decoration: none;
+    text-transform: uppercase;
+    background-color: rgb(93, 167, 20);
+    color: azure;
+    margin-right: 13px;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 4px;
+    border: transparent;
+}
+
+.reportExportBtn:hover{
+    background-color: rgb(166, 253, 109);
+    color: rgb(93, 167, 20);
+    border: 1px solid green;
+}
+
+.reportType p{
+    font-size: 20px;
+    font-weight: 200;
+    margin-bottom: 10px;
+}

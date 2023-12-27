@@ -13,6 +13,9 @@
                 <li class="menuActive liMainMenu">
                     <a href="dashboard.php"><i class="fa fa-dashboard"></i><span class="menuTexts">Dashboard</span></a>
                 </li>
+                <li class="menuActive liMainMenu">
+                    <a href="report.php"><i class="fa fa-file"></i><span class="menuTexts">Reports</span></a>
+                </li>
             <li class="menuActive">
             <a href="javascript:void(0);" class="showHideSubMenu" id="showFormLink">
                     <i class="fa fa-truck showHideSubMenu"></i>

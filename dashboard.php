@@ -7,6 +7,7 @@ $user = $_SESSION['user'];
 //get graph data in purchase order by status
     include('database/po_status_pie_graph.php');
     include('database/supplier_product_bar_graph.php');
+    include('database/delivery_history.php');
 
 ?>
 <!DOCTYPE html>
@@ -43,6 +44,11 @@ $user = $_SESSION['user'];
                             </figure>
                         </div>
                     </div>
+                    <div>
+                        <div id="deliveryHistory">
+
+                        </div>
+                    </div>
                 </div>
         </div>
     </div>
@@ -55,7 +61,7 @@ $user = $_SESSION['user'];
 
             var graphData = <?= json_encode($results)?>;
             
-            Highcharts.chart('container', {
+        Highcharts.chart('container', {
             chart: {
                 type: 'pie'
             },
@@ -108,45 +114,104 @@ $user = $_SESSION['user'];
         var barGraphCategories = <?= json_encode($categories)?>;
 
         Highcharts.chart('containerBarChart', {
-    chart: {
-        type: 'column'
-    },
-    title: {
-        text: 'Product Count Assigned To Supplier',
-        align: 'center'
-    },
-    xAxis: {
-        categories: barGraphCategories,
-        crosshair: true,
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: 'Product Count'
-        }
-    },
-    tooltip: {
-                pointFormatter: function(){ // this function will grant you more access to the data
-                    var point = this,
-                    series = point.series;
-
-                    return `<b>${point.category}</b>: ${point.y}`
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Product Count Assigned To Supplier',
+                align: 'center'
+            },
+            xAxis: {
+                categories: barGraphCategories,
+                crosshair: true,
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Product Count'
                 }
-    },
-    plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        }
-    },
-    series: [
-        {
-            name: 'Suppliers',
-            data: barGraphData
-        },
+            },
+            tooltip: {
+                        pointFormatter: function(){ // this function will grant you more access to the data
+                            var point = this,
+                            series = point.series;
 
-    ]
-});
+                            return `<b>${point.category}</b>: ${point.y}`
+                        }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: 'Suppliers',
+                    data: barGraphData
+                },
+
+            ]
+        });
+
+        var lineCategories = <?= json_encode($line_categories)?>;
+        var lineData = <?= json_encode($line_data)?>;
+        Highcharts.chart('deliveryHistory', {
+            chart:{
+                type: 'spline'
+            },
+            title: {
+            text: 'Delivery History Per Day',
+            align: 'center'
+            },
+
+            yAxis: {
+            title: {
+                text: 'Product Delivered'
+            }
+            },
+
+            xAxis: {
+            categories: lineCategories,
+            accessibility: {}
+            },
+
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+            },
+
+            plotOptions: {
+            series: {
+                label: {
+                connectorAllowed: false
+                },
+            }
+            },
+
+            series: [{
+            name: 'Product Delivered',
+            data: lineData
+            }],
+
+            responsive: {
+            rules: [{
+                condition: {
+                maxWidth: 500
+                },
+                chartOptions: {
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                }
+                }
+            }]
+            }
+
+        });
+
     </script>
 </body>
 </html>

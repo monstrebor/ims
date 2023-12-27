@@ -1,3 +1,9 @@
+.dashboard_sidebar{
+    width: 20%;
+    background: rgb(150, 70, 4);
+    height:auto;
+}
+
 .poCSS{
     margin-bottom: 25px;
     padding: 15px;
