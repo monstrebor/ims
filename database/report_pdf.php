@@ -2,14 +2,12 @@
     require('fpdf/fpdf.php');
 
     class PDF extends FPDF{
-
-        function __construct()
-        {
+        function __construct(){
             parent::__construct('L');
         }
 
         // Colored table
-        function FancyTable($header, $data)
+        function FancyTable($headers, $data, $row_height = 30)
         {
             // Colors, line width and bold font
             $this->SetFillColor(255,0,0);
@@ -18,45 +16,81 @@
             $this->SetLineWidth(.3);
             $this->SetFont('','B');
             // Header
-            $w = array(10, 50, 40, 15, 35, 50, 50);
-            for($i=0;$i<count($header);$i++)
-                $this->Cell($w[$i],7,$header[$i],1,0,'C',true);
+            
+            $width_sum = 0;
+            foreach($headers as $header_key => $header_data){
+                $this->Cell($header_data['width'], 7, $header_key, 1, 0, 'C', true);
+                $width_sum += $header_data['width'];
+            }
             $this->Ln();
+
             // Color and font restoration
-            $this->SetFillColor(224,235,255);
             $this->SetTextColor(0);
             $this->SetFont('');
 
-            $img_pos_y = 45;
-            foreach($data as $row)
-            {
-                $image =  is_null($row[1]) || $row[1] == "" ? 'No Image' : $this->Image('.././uploads/products/' . $row[1], 30, $img_pos_y, 20, 20);
 
-                $this->Cell($w[0],30,$row[0],'LRBT',0,'C');
-                $this->Cell($w[1],30,$image,'LRBT',0,'C');
-                $this->Cell($w[2],30,$row[2],'LRBT',0,'L');
-                $this->Cell($w[3],30,$row[3],'LRBT',0,'C');
-                $this->Cell($w[4],30,$row[4],'LRBT',0,'C');
-                $this->Cell($w[5],30,$row[5],'LRBT',0,'C');
-                $this->Cell($w[6],30,$row[6],'LRBT',0,'C');
+            $img_pos_y = 40;
+            $header_keys = array_keys($headers);
+            foreach($data as $row){
+                foreach($header_keys as $header_key){
+                    $content = $row[$header_key]['content'];
+                    $width = $headers[$header_key]['width'];
+                    $align = $row[$header_key]['align'];
+
+                    if($header_key == 'image')
+                    $content = is_null($content) || $content == "" ? 'No Image' : $this->Image('.././uploads/products/' . $content, 30, $img_pos_y, 30, 25);
+
+
+                    $this->Cell($width, $row_height, $content,'LRBT',0,$align);
+                }
+                
                 $this->Ln();
-
                 $img_pos_y += 30;
             }
+
             // Closing line
-            $this->Cell(array_sum($w),0,'','T');
+            $this->Cell($width_sum,0,'','T');
         }
-        }
+    }
 
         $type = $_GET['report'];
         $report_headers = [
-            'product' => 'Product Reports',
+            'product' => 'Product Report',
+            'supplier' => 'Supplier Report',
+            'delivery' => 'Delivery Report',
+            'purchase_orders' => 'Purchase Order Report'
         ];
 
+        //pull data from database
         include('connection.php');
 
+
+    //product export
     if($type == 'product'){
-        $header = array('id', 'image','product_name','stock','created_by','created_at','updated_at');
+        //Column headings - replace from mysql database or hardcode it
+        $headers = [
+            'id' => [
+                'width' => 15
+            ],
+            'image' => [
+                'width' => 40
+            ],
+            'product_name' => [
+                'width' => 35
+            ],
+            'stock' => [
+                'width' => 15
+            ],
+            'created_by' => [
+                'width' => 45
+            ],
+            'created_at' => [
+                'width' => 50
+            ],
+            'updated_at' => [
+                'width' => 50
+            ],
+        ];
         
         // Load Product
         $stmt = $conn->prepare("SELECT *, products.id as pid FROM products 
@@ -83,18 +117,259 @@
             });
 
             $data[] = [
-                $product['pid'],
-                $product['img'],
-                $product['product_name'],
-                // $product['description'],
-                number_format($product['stock']),
-                $product['created_by'],
-                date('M d,Y h:i:s A', strtotime($product['created_at'])),
-                date('M d,Y h:i:s A', strtotime($product['updated_at'])),
+                'id' => [
+                    'content' => $product['pid'],
+                    'align' => 'C'
+                ],
+                'image' => [
+                    'content' => $product['img'],
+                    'align' => 'C'
+                ],
+                'product_name' => [
+                    'content' => $product['product_name'],
+                    'align' => 'C'
+                ],
+                'stock' => [
+                    'content' => number_format($product['stock']),
+                    'align' => 'C'
+                ],
+                'created_by' => [
+                    'content' => $product['created_by'],
+                    'align' => 'C'
+                ],
+                'created_at' => [
+                    'content' => date('M d,Y h:i:s A', strtotime($product['created_at'])),
+                    'align' => 'L'
+                ],
+                'updated_at' => [
+                    'content' => date('M d,Y h:i:s A', strtotime($product['updated_at'])),
+                    'align' => 'L'
+                ]
             ];
         }
+        $row_height = 30;
     }
 
+    //supplier export
+    if($type === 'supplier'){
+        $stmt = $conn->prepare("SELECT suppliers.id as sid, suppliers.created_at as 'created_at', users.first_name, users.last_name, suppliers.supplier_location, suppliers.email, suppliers.created_by FROM suppliers INNER JOIN users ON suppliers.created_by = users.id ORDER BY suppliers.created_at DESC");
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $suppliers = $stmt->fetchAll();
+
+        $headers = [
+            'supplier_id' => [
+                'width' => 20
+            ],
+            'created_at' => [
+                'width' => 60
+            ],
+            'supplier_location' => [
+                'width' => 60
+            ],
+            'email' => [
+                'width' => 60
+            ],
+            'created_by' => [
+                'width' => 60
+            ]
+        ];
+        
+        $is_header = true;
+        foreach($suppliers as $supplier){
+            $supplier['created_by'] = $supplier['first_name'] .' '. $supplier['last_name'];
+
+
+            $data[] = [
+                'supplier_id' => [
+                    'content' => $supplier['sid'],
+                    'align' => 'C'
+                ],
+                'created_at' => [
+                    'content' => $supplier['created_at'],
+                    'align' => 'C'
+                ],
+                'supplier_location' => [
+                    'content' => $supplier['supplier_location'],
+                    'align' => 'C'
+                ],
+                'email' => [
+                    'content' => $supplier['email'],
+                    'align' => 'C'
+                ],
+                'created_by' => [
+                    'content' => $supplier['created_by'],
+                    'align' => 'C'
+                ]
+            ];
+        }
+        $row_height = 20;
+    }
+
+    //delivery history export
+    if($type === 'delivery'){
+        $stmt = $conn->prepare("SELECT date_received, qty_received, first_name, last_name, products.product_name, supplier_name, batch
+        FROM order_product_history, order_product, users, suppliers, products
+        WHERE 
+            order_product_history.order_product_id = order_product.id
+        AND
+            order_product.created_by = users.id
+        AND
+            order_product.supplier = suppliers.id
+        AND
+            order_product.product = products.id
+        ORDER BY order_product.batch DESC
+        ");
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $headers = [
+            'date_received' => [
+                'width' => 50
+            ],
+            'qty_received' => [
+                'width' => 25
+            ],
+            'product_name' => [
+                'width' => 50
+            ],
+            'supplier_name' => [
+                'width' => 50
+            ],
+            'batch' => [
+                'width' => 35
+            ],
+            'created_by' => [
+                'width' => 50
+            ]
+        ];
+
+        $deliveries = $stmt->fetchAll();
+            foreach($deliveries as $delivery){
+                $delivery['created_by'] = $delivery['first_name'] .' '. $delivery['last_name'];
+    
+                $data[] = [
+                    'date_received' => [
+                        'content' => $delivery['date_received'],
+                        'align' => 'C'
+                    ],
+                    'qty_received' => [
+                        'content' => $delivery['qty_received'],
+                        'align' => 'C'
+                    ],
+                    'product_name' => [
+                        'content' => $delivery['product_name'],
+                        'align' => 'C'
+                    ],
+                    'supplier_name' => [
+                        'content' => $delivery['supplier_name'],
+                        'align' => 'C'
+                    ],
+                    'batch' => [
+                        'content' => $delivery['batch'],
+                        'align' => 'C'
+                    ],
+                    'created_by' => [
+                        'content' => $delivery['created_by'],
+                        'align' => 'C'
+                    ]
+                ];
+        }
+        $row_height = 30;
+    }
+
+    //purchase order  export
+    if($type === 'purchase_orders'){
+        $stmt = $conn->prepare("SELECT products.product_name, order_product.id, order_product.quantity_ordered, order_product.quantity_received, order_product.quantity_remaining, order_product.status, order_product.batch, users.first_name, users.last_name, suppliers.supplier_name, order_product.created_at as 'created at' 
+        FROM order_product
+        INNER JOIN users ON order_product.created_by = users.id
+        INNER JOIN suppliers ON order_product.supplier = suppliers.id
+        INNER JOIN products ON order_product.product = products.id
+        ORDER BY order_product.batch DESC
+        ");
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $order_products = $stmt->fetchAll();
+
+        $headers = [
+            'qty_ordered' => [
+                'width' => 25
+            ],
+            'qty_received' => [
+                'width' => 30
+            ],
+            'qty_remaining' => [
+                'width' => 30
+            ],
+            'status' => [
+                'width' => 23
+            ],
+            'batch' => [
+                'width' => 25
+            ],
+            'supplier_name' => [
+                'width' => 30
+            ],
+            'product_name' => [
+                'width' => 30
+            ],
+            'created at' => [
+                'width' => 40
+            ],
+            'created_by' => [
+                'width' => 35
+            ]
+        ];
+
+        foreach($order_products as $order_product){
+        $order_product['created_by'] = $order_product['first_name'] .' '. $order_product['last_name'];
+
+        $data[] = [
+            'qty_ordered' => [
+                'content' => $order_product['quantity_ordered'],
+                'align' => 'C'
+            ],
+            'qty_received' => [
+                'content' => $order_product['quantity_received'],
+                'align' => 'C'
+            ],
+            'qty_remaining' => [
+                'content' => $order_product['quantity_remaining'],
+                'align' => 'C'
+            ],
+            'status' => [
+                'content' => $order_product['status'],
+                'align' => 'C'
+            ],
+            'batch' => [
+                'content' => $order_product['batch'],
+                'align' => 'C'
+            ],
+            'supplier_name' => [
+                'content' => $order_product['supplier_name'],
+                'align' => 'C'
+            ],
+            'product_name' => [
+                'content' => $order_product['product_name'],
+                'align' => 'C'
+            ],
+            'created at' => [
+                'content' => $order_product['created at'],
+                'align' => 'C'
+            ],
+            'created_by' => [
+                'content' => $order_product['created_by'],
+                'align' => 'C'
+            ]
+        ];
+        }
+        $row_height = 20;
+    }
+
+
+        //start generating PDF
         $pdf = new PDF();
         $pdf->SetFont('Arial','',20);
         $pdf->AddPage();
@@ -105,7 +380,7 @@
         $pdf->Ln();
         $pdf->Ln();
 
-        $pdf->FancyTable($header,$data);
+        $pdf->FancyTable($headers,$data,$row_height);
         $pdf->Output();
 
 
