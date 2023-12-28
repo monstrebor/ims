@@ -15,9 +15,9 @@ if(!isset($_SESSION['user'])) header('Location: login.php');
     <script src="https://use.fontawesome.com/0c7a3095b5.js"></script>
 </head>
 <body>
-    <div id="dashboardMainContainer">
+    <div id="dashboardMainContainer" style="height: 610px;">
     <?php include('partials/app-sidebar.php')?>
-        <div class="dashboard_content_container" id="dashboard_content_container">
+        <div class="dashboard_content_container" id="dashboard_content_container" >
             <?php include('partials/app-topnav.php')?>
             <div id="reportContainer">
                 <div class="reportTypeContainer">
@@ -25,14 +25,14 @@ if(!isset($_SESSION['user'])) header('Location: login.php');
                         <p>Export Products</p>
                         <div class="alignRight">
                             <a href="database/report_csv.php?report=product" class="reportExportBtn">Excel</a>
-                            <a href="" class="reportExportBtn">PDF</a>
+                            <a href="database/report_pdf.php?report=product" class="reportExportBtn">PDF</a>
                         </div>
                     </div>
                     <div class="reportType">
                         <p>Export Suppliers</p>
                         <div class="alignRight">
                             <a href="database/report_csv.php?report=supplier" class="reportExportBtn">Excel</a>
-                            <a href="" class="reportExportBtn">PDF</a>
+                            <a href="database/report_pdf.php?report=supplier" class="reportExportBtn">PDF</a>
                         </div>
                     </div>
                 </div>
@@ -40,14 +40,14 @@ if(!isset($_SESSION['user'])) header('Location: login.php');
                     <div class="reportType">
                         <p>Export Deliveries</p>
                         <div class="alignRight">
-                            <a href="database/report_csv.php?report=product" class="reportExportBtn">Excel</a>
+                            <a href="database/report_csv.php?report=delivery" class="reportExportBtn">Excel</a>
                             <a href="" class="reportExportBtn">PDF</a>
                         </div>
                     </div>
                     <div class="reportType">
                         <p>Export Purchase Orders</p>
                         <div class="alignRight">
-                            <a href="database/report_csv.php?report=product" class="reportExportBtn">Excel</a>
+                            <a href="database/report_csv.php?report=purchase_orders" class="reportExportBtn">Excel</a>
                             <a href="" class="reportExportBtn">PDF</a>
                         </div>
                     </div>

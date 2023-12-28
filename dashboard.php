@@ -33,14 +33,14 @@ $user = $_SESSION['user'];
                             <figure class="highcharts-figure">
                             <div id="container"></div>
                             <p class="highcharts-description" style="text-align: center;">
-                                Here is the breakdown of purchase orders by status. </p>
+                                It shows the present status of ordered products. </p>
                             </figure>
                         </div>
                         <div class="col50">
                             <figure class="highcharts-figure">
                             <div id="containerBarChart"></div>
                             <p class="highcharts-description" style="text-align: center;">
-                                Here is the breakdown of purchase orders by status. </p>
+                                Here is total amount of orders assigned to the suppliers as of today. </p>
                             </figure>
                         </div>
                     </div>

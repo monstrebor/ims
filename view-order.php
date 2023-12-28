@@ -24,7 +24,7 @@ $suppliers = include('database/show.php');
         <?php include('partials/app-sidebar.php')?>
         <div class="dashboard_content_container" id="dashboard_content_container">
             <?php include('partials/app-topnav.php')?>
-            <div class="dashboard_Main">
+            <div class="dashboard_Main" style="height: auto;">
                 <div class="dashboard_content_main">
                     <div class="row">
                         <div class="column column-12">

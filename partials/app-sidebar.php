@@ -48,8 +48,8 @@
                 </a>
 
                 <ul class="subMenus">
+                <li class="subMenuLink"><a href="view-order.php"><i class="fa fa-circle-o"></i>View order</a></li>
                 <li class="subMenuLink"><a href="product-order.php"><i class="fa fa-circle-o"></i>Create Order</a></li>
-                    <li class="subMenuLink"><a href="view-order.php"><i class="fa fa-circle-o"></i>View order</a></li>
                 </ul>
             </li>
             <li class="menuActive showHideSubMenu">

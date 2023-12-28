@@ -1,7 +1,7 @@
 .dashboard_Main{
     background-color: rgb(255, 225, 206);
     object-fit: cover;
-    height: 565px;
+    height: auto;
     width: 98%;
     margin-left: 2%;
 }

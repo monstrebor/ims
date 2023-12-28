@@ -18,9 +18,9 @@ $users = include('database/show.php');
     <title>View Users - Inventory Management System</title> <?php include('partials/app-header-scripts.php');?> 
 </head>
 <body>
-    <div id="dashboardMainContainer">
+    <div id="dashboardMainContainer" >
         <?php include('partials/app-sidebar.php')?>
-        <div class="dashboard_content_container" id="dashboard_content_container">
+        <div class="dashboard_content_container" id="dashboard_content_container" style="height: auto;">
                 <?php include('partials/app-topnav.php')?>
             <div class="dashboard_Main">
                 <div class="dashboard_content_main">
